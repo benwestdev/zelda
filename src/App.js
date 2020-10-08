@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
+import useMovement from "./useMovement";
 import "./App.css";
 
 export default function App() {
@@ -7,9 +8,7 @@ export default function App() {
   const linkUpRef = useRef(null);
   const linkRightRef = useRef(null);
   const linkLeftRef = useRef(null);
-  const [direction, setDirection] = useState("down");
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
+  const { x, y, direction, move } = useMovement();
 
   // set the height and width of canvas
   useEffect(() => {
@@ -30,29 +29,6 @@ export default function App() {
 
     context.drawImage(theLinkRef.current, x, y);
   }, [x, y]);
-
-  // set event listener for key actions
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-
-    function handleKeyDown(e) {
-      if (e.key === "ArrowUp") move("up");
-      if (e.key === "ArrowLeft") move("left");
-      if (e.key === "ArrowDown") move("down");
-      if (e.key === "ArrowRight") move("right");
-    }
-
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  function move(dir) {
-    setDirection(dir);
-
-    if (direction === "up") setY((y) => y - 20);
-    if (direction === "down") setY((y) => y + 20);
-    if (direction === "left") setX((x) => x - 20);
-    if (direction === "right") setX((x) => x + 20);
-  }
 
   return (
     <div className="app">
